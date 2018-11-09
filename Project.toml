@@ -1,6 +1,6 @@
 authors = ["Sean McBane <sean@ices.utexas.edu>"]
 name = "MirroredArrays"
 uuid = "edfed022-ddf0-11e8-3461-e736d26fdb96"
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
