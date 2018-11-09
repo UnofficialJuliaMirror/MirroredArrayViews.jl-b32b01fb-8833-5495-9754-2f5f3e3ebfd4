@@ -1,6 +1,6 @@
 module MirroredArrays
 
-import Base: size, getindex, setindex!, similar, strides
+import Base: size, getindex, setindex!, similar
 
 export MirroredArray
 
@@ -38,8 +38,6 @@ function setindex!(A::MirroredArray{D, N}, v, indices::Vararg{I, N}
                   ) where {D, N} where I <: Integer
     A.data[mirror_indices(A, indices)...] = v
 end
-
-strides(A::MirroredArray) = strides(A.data)
 
 similar(A::MirroredArray{D}) where D = MirroredArray(similar(A.data), D...)
 
