@@ -4,6 +4,13 @@ import Base: size, getindex, setindex!, similar
 
 export MirroredArrayView
 
+"""
+`MirroredArrayView(arr::AbstractArray, dims...)`
+
+Construct a view of array `arr` mirrored along each dimension in `dims`.
+Repeated dimensions will be ignored. The mirrored dimensions become part of
+the type of the view and no data is copied.
+"""
 struct MirroredArrayView{D, N, T, ARR} <: AbstractArray{T, N}
     data::ARR
 
@@ -17,12 +24,15 @@ struct MirroredArrayView{D, N, T, ARR} <: AbstractArray{T, N}
                 end
             end
         end
-        new{(Set(dims...)...,), N, T, typeof(arr)}(arr)
+        new{(dims...,), N, T, typeof(arr)}(arr)
     end
 end
 
 size(A::MirroredArrayView) = size(A.data)
 
+# This generates an expression consisting of tuple broadcasting to
+# convert a cartesian index into its mirrored version in a manner the
+# compiler can optimize away as much as possible.
 @generated function mirror_indices(A::MirroredArrayView{D, N},
                                    indices::NTuple{N, I}
                                   ) where {D, N} where I <: Integer
