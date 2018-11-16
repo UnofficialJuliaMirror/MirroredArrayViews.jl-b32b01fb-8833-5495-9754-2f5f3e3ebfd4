@@ -17,7 +17,7 @@ struct MirroredArrayView{D, N, T, ARR} <: AbstractArray{T, N}
                 end
             end
         end
-        new{(dims...,), N, T, typeof(arr)}(arr)
+        new{(Set(dims...)...,), N, T, typeof(arr)}(arr)
     end
 end
 
