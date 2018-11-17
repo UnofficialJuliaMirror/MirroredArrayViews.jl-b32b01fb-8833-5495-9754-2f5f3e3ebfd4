@@ -65,15 +65,17 @@ end
     for iter = 1:outer_iters
         dim = rand(3:maxdims)
         A = rand(Int, ( (rand(1:maxsize) for i = 1:dim)..., ))
+        println("A has size $(size(A))")
 
         for iiter = 1:inner_iters
             dims = ( shuffle!([i for i = 1:rand(1:dim)])..., )
+            println("    Mirroring A along $(dims)")
             B = MirroredArrayView(A, dims...)
             
             for i = length(dims):-1:1
                 unmirror = dims[i:length(dims)]
                 mirror = dims[1:i-1]
-
+                println("      Testing mirror(A, $mirror) == mirror(mirror(A, $dims), $unmirror)")
                 @test MirroredArrayView(A, mirror...) ==
                       MirroredArrayView(B, unmirror...)
             end
